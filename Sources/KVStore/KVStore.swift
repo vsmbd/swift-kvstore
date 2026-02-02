@@ -12,7 +12,8 @@ import SwiftCore
 
 /// Storage contract for key–value operations. String keys; one get/set overload per supported type; all return `CheckpointedResult<T, KVStoreError>`.
 /// Supported types: SwiftCore.ScalarValue (String, Bool, Int64, UInt64, Double, Float) plus Data. Compiler picks the overload from the call site (return type or argument type), enforcing type safety at compile time.
-public protocol KVStore: Sendable {
+public protocol KVStore: Entity,
+						 Sendable {
 	func get(_ key: String) -> CheckpointedResult<Bool?, KVStoreError>
 	func set(_ key: String, value: Bool) -> CheckpointedResult<Void, KVStoreError>
 

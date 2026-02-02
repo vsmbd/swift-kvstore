@@ -28,84 +28,84 @@ public final class SettingsStore: KVStore,
 
 	public func get(_ key: String) -> CheckpointedResult<Bool?, KVStoreError> {
 		guard defaults.object(forKey: key) != nil else {
-			return .success(nil)
+			return .success(nil, .checkpoint(self))
 		}
-		return .success(defaults.bool(forKey: key))
+		return .success(defaults.bool(forKey: key), .checkpoint(self))
 	}
 
 	public func set(_ key: String, value: Bool) -> CheckpointedResult<Void, KVStoreError> {
 		defaults.set(value, forKey: key)
-		return .success(())
+		return .success((), .checkpoint(self))
 	}
 
 	public func get(_ key: String) -> CheckpointedResult<Int64?, KVStoreError> {
 		guard let number = defaults.object(forKey: key) as? NSNumber else {
-			return .success(nil)
+			return .success(nil, .checkpoint(self))
 		}
-		return .success(number.int64Value)
+		return .success(number.int64Value, .checkpoint(self))
 	}
 
 	public func set(_ key: String, value: Int64) -> CheckpointedResult<Void, KVStoreError> {
 		defaults.set(NSNumber(value: value), forKey: key)
-		return .success(())
+		return .success((), .checkpoint(self))
 	}
 
 	public func get(_ key: String) -> CheckpointedResult<UInt64?, KVStoreError> {
 		guard let number = defaults.object(forKey: key) as? NSNumber else {
-			return .success(nil)
+			return .success(nil, .checkpoint(self))
 		}
-		return .success(number.uint64Value)
+		return .success(number.uint64Value, .checkpoint(self))
 	}
 
 	public func set(_ key: String, value: UInt64) -> CheckpointedResult<Void, KVStoreError> {
 		defaults.set(NSNumber(value: value), forKey: key)
-		return .success(())
+		return .success((), .checkpoint(self))
 	}
 
 	public func get(_ key: String) -> CheckpointedResult<Double?, KVStoreError> {
 		guard defaults.object(forKey: key) != nil else {
-			return .success(nil)
+			return .success(nil, .checkpoint(self))
 		}
-		return .success(defaults.double(forKey: key))
+		return .success(defaults.double(forKey: key), .checkpoint(self))
 	}
 
 	public func set(_ key: String, value: Double) -> CheckpointedResult<Void, KVStoreError> {
 		defaults.set(value, forKey: key)
-		return .success(())
+		return .success((), .checkpoint(self))
 	}
 
 	public func get(_ key: String) -> CheckpointedResult<Float?, KVStoreError> {
 		guard defaults.object(forKey: key) != nil else {
-			return .success(nil)
+			return .success(nil, .checkpoint(self))
 		}
-		return .success(defaults.float(forKey: key))
+		return .success(defaults.float(forKey: key), .checkpoint(self))
 	}
 
 	public func set(_ key: String, value: Float) -> CheckpointedResult<Void, KVStoreError> {
 		defaults.set(value, forKey: key)
-		return .success(())
+		return .success((), .checkpoint(self))
 	}
 
 	public func get(_ key: String) -> CheckpointedResult<String?, KVStoreError> {
-		return .success(defaults.string(forKey: key))
+		return .success(defaults.string(forKey: key), .checkpoint(self))
 	}
 
 	public func set(_ key: String, value: String) -> CheckpointedResult<Void, KVStoreError> {
 		defaults.set(value, forKey: key)
-		return .success(())
+		return .success((), .checkpoint(self))
 	}
 
 	public func get(_ key: String) -> CheckpointedResult<Data?, KVStoreError> {
-		return .success(defaults.data(forKey: key))
+		return .success(defaults.data(forKey: key), .checkpoint(self))
 	}
 
 	public func set(_ key: String, value: Data) -> CheckpointedResult<Void, KVStoreError> {
 		defaults.set(value, forKey: key)
-		return .success(())
+		return .success((), .checkpoint(self))
 	}
 
 	public func remove(_ key: String) -> CheckpointedResult<Void, KVStoreError> {
 		defaults.removeObject(forKey: key)
-		return .success(())
+		return .success((), .checkpoint(self))
 	}
 }

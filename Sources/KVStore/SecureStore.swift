@@ -31,132 +31,172 @@ public final class SecureStore: KVStore,
 
 	public func get(_ key: String) -> CheckpointedResult<Bool?, KVStoreError> {
 		switch readData(key) {
-		case .success(nil):
-			return .success(nil)
-		case .success(let data?):
+		case .success(nil, let checkpoint):
+			return .success(nil, checkpoint)
+		case .success(let data?, let checkpoint):
 			guard let value = decodeBool(data) else {
-				return .failure(.typeMismatch(key: key, expected: "Bool"))
+				return .failure(.init(error: .typeMismatch(key: key, expected: "Bool"), .checkpoint(self)))
 			}
-			return .success(value)
-		case .failure(let error):
-			return .failure(error)
+			return .success(value, checkpoint)
+		case .failure(let errorInfo):
+			return .failure(errorInfo)
 		}
 	}
 
 	public func set(_ key: String, value: Bool) -> CheckpointedResult<Void, KVStoreError> {
-		writeData(key, encodeBool(value))
+		switch writeData(key, encodeBool(value)) {
+		case .success(_, let checkpoint):
+			return .success((), checkpoint)
+		case .failure(let errorInfo):
+			return .failure(errorInfo)
+		}
 	}
 
 	public func get(_ key: String) -> CheckpointedResult<Int64?, KVStoreError> {
 		switch readData(key) {
-		case .success(nil):
-			return .success(nil)
-		case .success(let data?):
+		case .success(nil, let checkpoint):
+			return .success(nil, checkpoint)
+		case .success(let data?, let checkpoint):
 			guard let value = decodeInt64(data) else {
-				return .failure(.typeMismatch(key: key, expected: "Int64"))
+				return .failure(.init(error: .typeMismatch(key: key, expected: "Int64"), .checkpoint(self)))
 			}
-			return .success(value)
-		case .failure(let error):
-			return .failure(error)
+			return .success(value, checkpoint)
+		case .failure(let errorInfo):
+			return .failure(errorInfo)
 		}
 	}
 
 	public func set(_ key: String, value: Int64) -> CheckpointedResult<Void, KVStoreError> {
-		writeData(key, encodeInt64(value))
+		switch writeData(key, encodeInt64(value)) {
+		case .success(_, let checkpoint):
+			return .success((), checkpoint)
+		case .failure(let errorInfo):
+			return .failure(errorInfo)
+		}
 	}
 
 	public func get(_ key: String) -> CheckpointedResult<UInt64?, KVStoreError> {
 		switch readData(key) {
-		case .success(nil):
-			return .success(nil)
-		case .success(let data?):
+		case .success(nil, let checkpoint):
+			return .success(nil, checkpoint)
+		case .success(let data?, let checkpoint):
 			guard let value = decodeUInt64(data) else {
-				return .failure(.typeMismatch(key: key, expected: "UInt64"))
+				return .failure(.init(error: .typeMismatch(key: key, expected: "UInt64"), .checkpoint(self)))
 			}
-			return .success(value)
-		case .failure(let error):
-			return .failure(error)
+			return .success(value, checkpoint)
+		case .failure(let errorInfo):
+			return .failure(errorInfo)
 		}
 	}
 
 	public func set(_ key: String, value: UInt64) -> CheckpointedResult<Void, KVStoreError> {
-		writeData(key, encodeUInt64(value))
+		switch writeData(key, encodeUInt64(value)) {
+		case .success(_, let checkpoint):
+			return .success((), checkpoint)
+		case .failure(let errorInfo):
+			return .failure(errorInfo)
+		}
 	}
 
 	public func get(_ key: String) -> CheckpointedResult<Double?, KVStoreError> {
 		switch readData(key) {
-		case .success(nil):
-			return .success(nil)
-		case .success(let data?):
+		case .success(nil, let checkpoint):
+			return .success(nil, checkpoint)
+		case .success(let data?, let checkpoint):
 			guard let value = decodeDouble(data) else {
-				return .failure(.typeMismatch(key: key, expected: "Double"))
+				return .failure(.init(error: .typeMismatch(key: key, expected: "Double"), .checkpoint(self)))
 			}
-			return .success(value)
-		case .failure(let error):
-			return .failure(error)
+			return .success(value, checkpoint)
+		case .failure(let errorInfo):
+			return .failure(errorInfo)
 		}
 	}
 
 	public func set(_ key: String, value: Double) -> CheckpointedResult<Void, KVStoreError> {
-		writeData(key, encodeDouble(value))
+		switch writeData(key, encodeDouble(value)) {
+		case .success(_, let checkpoint):
+			return .success((), checkpoint)
+		case .failure(let errorInfo):
+			return .failure(errorInfo)
+		}
 	}
 
 	public func get(_ key: String) -> CheckpointedResult<Float?, KVStoreError> {
 		switch readData(key) {
-		case .success(nil):
-			return .success(nil)
-		case .success(let data?):
+		case .success(nil, let checkpoint):
+			return .success(nil, checkpoint)
+		case .success(let data?, let checkpoint):
 			guard let value = decodeFloat(data) else {
-				return .failure(.typeMismatch(key: key, expected: "Float"))
+				return .failure(.init(error: .typeMismatch(key: key, expected: "Float"), .checkpoint(self)))
 			}
-			return .success(value)
-		case .failure(let error):
-			return .failure(error)
+			return .success(value, checkpoint)
+		case .failure(let errorInfo):
+			return .failure(errorInfo)
 		}
 	}
 
 	public func set(_ key: String, value: Float) -> CheckpointedResult<Void, KVStoreError> {
-		writeData(key, encodeFloat(value))
+		switch writeData(key, encodeFloat(value)) {
+		case .success(_, let checkpoint):
+			return .success((), checkpoint)
+		case .failure(let errorInfo):
+			return .failure(errorInfo)
+		}
 	}
 
 	public func get(_ key: String) -> CheckpointedResult<String?, KVStoreError> {
 		switch readData(key) {
-		case .success(nil):
-			return .success(nil)
-		case .success(let data?):
+		case .success(nil, let checkpoint):
+			return .success(nil, checkpoint)
+		case .success(let data?, let checkpoint):
 			guard let value = decodeString(data) else {
-				return .failure(.typeMismatch(key: key, expected: "String"))
+				return .failure(.init(error: .typeMismatch(key: key, expected: "String"), .checkpoint(self)))
 			}
-			return .success(value)
-		case .failure(let error):
-			return .failure(error)
+			return .success(value, checkpoint)
+		case .failure(let errorInfo):
+			return .failure(errorInfo)
 		}
 	}
 
 	public func set(_ key: String, value: String) -> CheckpointedResult<Void, KVStoreError> {
-		writeData(key, encodeString(value))
+		switch writeData(key, encodeString(value)) {
+		case .success(_, let checkpoint):
+			return .success((), checkpoint)
+		case .failure(let errorInfo):
+			return .failure(errorInfo)
+		}
 	}
 
 	public func get(_ key: String) -> CheckpointedResult<Data?, KVStoreError> {
 		switch readData(key) {
-		case .success(nil):
-			return .success(nil)
-		case .success(let data?):
+		case .success(nil, let checkpoint):
+			return .success(nil, checkpoint)
+		case .success(let data?, let checkpoint):
 			guard let value = decodeData(data) else {
-				return .failure(.typeMismatch(key: key, expected: "Data"))
+				return .failure(.init(error: .typeMismatch(key: key, expected: "Data"), .checkpoint(self)))
 			}
-			return .success(value)
-		case .failure(let error):
-			return .failure(error)
+			return .success(value, checkpoint)
+		case .failure(let errorInfo):
+			return .failure(errorInfo)
 		}
 	}
 
 	public func set(_ key: String, value: Data) -> CheckpointedResult<Void, KVStoreError> {
-		writeData(key, encodeData(value))
+		switch writeData(key, encodeData(value)) {
+		case .success(_, let checkpoint):
+			return .success((), checkpoint)
+		case .failure(let errorInfo):
+			return .failure(errorInfo)
+		}
 	}
 
 	public func remove(_ key: String) -> CheckpointedResult<Void, KVStoreError> {
-		deleteItem(key)
+		switch deleteItem(key) {
+		case .success(_, let checkpoint):
+			return .success((), checkpoint)
+		case .failure(let errorInfo):
+			return .failure(errorInfo)
+		}
 	}
 
 	// MARK: - Keychain ops
@@ -174,13 +214,13 @@ public final class SecureStore: KVStore,
 		switch status {
 		case errSecSuccess:
 			guard let data = result as? Data else {
-				return .failure(.underlying(message: "Keychain returned non-Data for key \"\(key)\""))
+				return .failure(.init(error: .underlying(message: "Keychain returned non-Data for key \"\(key)\""), .checkpoint(self)))
 			}
-			return .success(data)
+			return .success(data, .checkpoint(self))
 		case errSecItemNotFound:
-			return .success(nil)
+			return .success(nil, .checkpoint(self))
 		default:
-			return .failure(.keychainError(status: status))
+			return .failure(.init(error: .keychainError(status: status), .checkpoint(self)))
 		}
 	}
 
@@ -199,9 +239,9 @@ public final class SecureStore: KVStore,
 		let status = SecItemAdd(addQuery as CFDictionary, nil)
 		switch status {
 		case errSecSuccess:
-			return .success(())
+			return .success((), .checkpoint(self))
 		default:
-			return .failure(.keychainError(status: status))
+			return .failure(.init(error: .keychainError(status: status), .checkpoint(self)))
 		}
 	}
 
@@ -216,9 +256,9 @@ public final class SecureStore: KVStore,
 		let status = SecItemDelete(query as CFDictionary)
 		switch status {
 		case errSecSuccess, errSecItemNotFound:
-			return .success(())
+			return .success((), .checkpoint(self))
 		default:
-			return .failure(.keychainError(status: status))
+			return .failure(.init(error: .keychainError(status: status), .checkpoint(self)))
 		}
 	}
 

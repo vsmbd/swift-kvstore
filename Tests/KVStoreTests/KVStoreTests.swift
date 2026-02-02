@@ -17,7 +17,7 @@ func settingsStore_getMissing_returnsSuccessNil() async throws {
 	let store = SettingsStore(defaults: defaults)
 	let result: CheckpointedResult<String?, KVStoreError> = store.get("nonexistent")
 	switch result {
-	case .success(let value):
+	case let .success(value, _):
 		#expect(value == nil)
 	case .failure:
 		Issue.record("expected success(nil), got failure")
@@ -31,11 +31,11 @@ func settingsStore_setThenGet_roundTrips() async throws {
 	let store = SettingsStore(defaults: defaults)
 	switch store.set("k", value: Int64(42)) {
 	case .success: break
-	case .failure(let error): Issue.record("set failed: \(error)")
+	case .failure(let errorInfo): Issue.record("set failed: \(errorInfo.error)")
 	}
 	let getResult: CheckpointedResult<Int64?, KVStoreError> = store.get("k")
 	switch getResult {
-	case .success(let value):
+	case let .success(value, _):
 		#expect(value == 42)
 	case .failure:
 		Issue.record("expected success(42), got failure")
@@ -50,11 +50,11 @@ func settingsStore_remove_thenGetReturnsNil() async throws {
 	_ = store.set("k", value: true)
 	switch store.remove("k") {
 	case .success: break
-	case .failure(let error): Issue.record("remove failed: \(error)")
+	case .failure(let errorInfo): Issue.record("remove failed: \(errorInfo.error)")
 	}
 	let getResult: CheckpointedResult<Bool?, KVStoreError> = store.get("k")
 	switch getResult {
-	case .success(let value):
+	case let .success(value, _):
 		#expect(value == nil)
 	case .failure:
 		Issue.record("expected success(nil), got failure")
@@ -72,14 +72,14 @@ func secureStore_setThenGet_roundTrips() async throws {
 	_ = store.remove(key)
 	switch store.set(key, value: "secret") {
 	case .success: break
-	case .failure(let error): Issue.record("set failed: \(error)")
+	case .failure(let errorInfo): Issue.record("set failed: \(errorInfo.error)")
 	}
 	let getResult: CheckpointedResult<String?, KVStoreError> = store.get(key)
 	switch getResult {
-	case .success(let value):
+	case let .success(value, _):
 		#expect(value == "secret")
-	case .failure(let error):
-		Issue.record("get failed: \(error)")
+	case .failure(let errorInfo):
+		Issue.record("get failed: \(errorInfo.error)")
 	}
 	_ = store.remove(key)
 }
@@ -94,9 +94,9 @@ func secureStore_typeMismatch_returnsFailure() async throws {
 	switch getResult {
 	case .success:
 		Issue.record("expected typeMismatch failure")
-	case .failure(let error):
-		if case .typeMismatch(key: key, expected: _) = error { } else {
-			Issue.record("expected .typeMismatch, got \(error)")
+	case .failure(let errorInfo):
+		if case .typeMismatch(key: key, expected: _) = errorInfo.error { } else {
+			Issue.record("expected .typeMismatch, got \(errorInfo.error)")
 		}
 	}
 	_ = store.remove(key)
