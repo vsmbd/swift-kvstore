@@ -15,7 +15,7 @@ func settingsStore_getMissing_returnsSuccessNil() async throws {
 	let defaults = UserDefaults(suiteName: "KVStoreTests.settingsStore.getMissing")!
 	defaults.removePersistentDomain(forName: "KVStoreTests.settingsStore.getMissing")
 	let store = SettingsStore(defaults: defaults)
-	let result: CheckpointedResult<String?, KVStoreError> = store.get("nonexistent")
+	let result: KVStoreResult<String?> = store.getString("nonexistent")
 	switch result {
 	case let .success(value, _):
 		#expect(value == nil)
@@ -29,11 +29,11 @@ func settingsStore_setThenGet_roundTrips() async throws {
 	let defaults = UserDefaults(suiteName: "KVStoreTests.settingsStore.roundTrip")!
 	defaults.removePersistentDomain(forName: "KVStoreTests.settingsStore.roundTrip")
 	let store = SettingsStore(defaults: defaults)
-	switch store.set("k", value: Int64(42)) {
+	switch store.setInt64("k", value: Int64(42)) {
 	case .success: break
-	case .failure(let errorInfo): Issue.record("set failed: \(errorInfo.error)")
+	case .failure(let errorInfo): Issue.record("setInt64 failed: \(errorInfo.error)")
 	}
-	let getResult: CheckpointedResult<Int64?, KVStoreError> = store.get("k")
+	let getResult: KVStoreResult<Int64?> = store.getInt64("k")
 	switch getResult {
 	case let .success(value, _):
 		#expect(value == 42)
@@ -47,12 +47,12 @@ func settingsStore_remove_thenGetReturnsNil() async throws {
 	let defaults = UserDefaults(suiteName: "KVStoreTests.settingsStore.remove")!
 	defaults.removePersistentDomain(forName: "KVStoreTests.settingsStore.remove")
 	let store = SettingsStore(defaults: defaults)
-	_ = store.set("k", value: true)
+	_ = store.setBool("k", value: true)
 	switch store.remove("k") {
 	case .success: break
 	case .failure(let errorInfo): Issue.record("remove failed: \(errorInfo.error)")
 	}
-	let getResult: CheckpointedResult<Bool?, KVStoreError> = store.get("k")
+	let getResult: KVStoreResult<Bool?> = store.getBool("k")
 	switch getResult {
 	case let .success(value, _):
 		#expect(value == nil)
@@ -70,16 +70,16 @@ func secureStore_setThenGet_roundTrips() async throws {
 	let store = SecureStore(service: "KVStoreTests.secureStore")
 	let key = "roundTrip"
 	_ = store.remove(key)
-	switch store.set(key, value: "secret") {
+	switch store.setString(key, value: "secret") {
 	case .success: break
-	case .failure(let errorInfo): Issue.record("set failed: \(errorInfo.error)")
+	case .failure(let errorInfo): Issue.record("setString failed: \(errorInfo.error)")
 	}
-	let getResult: CheckpointedResult<String?, KVStoreError> = store.get(key)
+	let getResult: KVStoreResult<String?> = store.getString(key)
 	switch getResult {
 	case let .success(value, _):
 		#expect(value == "secret")
 	case .failure(let errorInfo):
-		Issue.record("get failed: \(errorInfo.error)")
+		Issue.record("getString failed: \(errorInfo.error)")
 	}
 	_ = store.remove(key)
 }
@@ -89,8 +89,8 @@ func secureStore_typeMismatch_returnsFailure() async throws {
 	let store = SecureStore(service: "KVStoreTests.secureStore")
 	let key = "typeMismatch"
 	_ = store.remove(key)
-	_ = store.set(key, value: Int64(100))
-	let getResult: CheckpointedResult<Float?, KVStoreError> = store.get(key)
+	_ = store.setInt64(key, value: Int64(100))
+	let getResult: KVStoreResult<Float?> = store.getFloat(key)
 	switch getResult {
 	case .success:
 		Issue.record("expected typeMismatch failure")

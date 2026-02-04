@@ -8,32 +8,56 @@
 import Foundation
 import SwiftCore
 
+/// Result type for KVStore operations: `CheckpointedResult<T, KVStoreError>`.
+public typealias KVStoreResult<T> = CheckpointedResult<T, KVStoreError>
+
 // MARK: - KVStore
 
-/// Storage contract for key–value operations. String keys; one get/set overload per supported type; all return `CheckpointedResult<T, KVStoreError>`.
-/// Supported types: SwiftCore.ScalarValue (String, Bool, Int64, UInt64, Double, Float) plus Data. Compiler picks the overload from the call site (return type or argument type), enforcing type safety at compile time.
+/// Storage contract for key–value operations. String keys; one getType/setType pair per supported type; all return `KVStoreResult<T>`.
+/// Supported types: SwiftCore.ScalarValue (String, Bool, Int64, UInt64, Double, Float) plus Data. Call site uses the typed method name (e.g. getBool/setBool), enforcing type safety at compile time.
 public protocol KVStore: Entity,
 						 Sendable {
-	func get(_ key: String) -> CheckpointedResult<Bool?, KVStoreError>
-	func set(_ key: String, value: Bool) -> CheckpointedResult<Void, KVStoreError>
+	func getBool(_ key: String) -> KVStoreResult<Bool?>
+	func setBool(
+		_ key: String,
+		value: Bool
+	) -> KVStoreResult<Void>
 
-	func get(_ key: String) -> CheckpointedResult<Int64?, KVStoreError>
-	func set(_ key: String, value: Int64) -> CheckpointedResult<Void, KVStoreError>
+	func getInt64(_ key: String) -> KVStoreResult<Int64?>
+	func setInt64(
+		_ key: String,
+		value: Int64
+	) -> KVStoreResult<Void>
 
-	func get(_ key: String) -> CheckpointedResult<UInt64?, KVStoreError>
-	func set(_ key: String, value: UInt64) -> CheckpointedResult<Void, KVStoreError>
+	func getUInt64(_ key: String) -> KVStoreResult<UInt64?>
+	func setUInt64(
+		_ key: String,
+		value: UInt64
+	) -> KVStoreResult<Void>
 
-	func get(_ key: String) -> CheckpointedResult<Double?, KVStoreError>
-	func set(_ key: String, value: Double) -> CheckpointedResult<Void, KVStoreError>
+	func getDouble(_ key: String) -> KVStoreResult<Double?>
+	func setDouble(
+		_ key: String,
+		value: Double
+	) -> KVStoreResult<Void>
 
-	func get(_ key: String) -> CheckpointedResult<Float?, KVStoreError>
-	func set(_ key: String, value: Float) -> CheckpointedResult<Void, KVStoreError>
+	func getFloat(_ key: String) -> KVStoreResult<Float?>
+	func setFloat(
+		_ key: String,
+		value: Float
+	) -> KVStoreResult<Void>
 
-	func get(_ key: String) -> CheckpointedResult<String?, KVStoreError>
-	func set(_ key: String, value: String) -> CheckpointedResult<Void, KVStoreError>
+	func getString(_ key: String) -> KVStoreResult<String?>
+	func setString(
+		_ key: String,
+		value: String
+	) -> KVStoreResult<Void>
 
-	func get(_ key: String) -> CheckpointedResult<Data?, KVStoreError>
-	func set(_ key: String, value: Data) -> CheckpointedResult<Void, KVStoreError>
+	func getData(_ key: String) -> KVStoreResult<Data?>
+	func setData(
+		_ key: String,
+		value: Data
+	) -> KVStoreResult<Void>
 
-	func remove(_ key: String) -> CheckpointedResult<Void, KVStoreError>
+	func remove(_ key: String) -> KVStoreResult<Void>
 }

@@ -29,85 +29,85 @@ public final class SettingsStore: KVStore,
 		self.identifier = Self.nextID
 	}
 
-	public func get(_ key: String) -> CheckpointedResult<Bool?, KVStoreError> {
+	public func getBool(_ key: String) -> KVStoreResult<Bool?> {
 		guard defaults.object(forKey: key) != nil else {
 			return .success(nil, .checkpoint(self))
 		}
 		return .success(defaults.bool(forKey: key), .checkpoint(self))
 	}
 
-	public func set(_ key: String, value: Bool) -> CheckpointedResult<Void, KVStoreError> {
+	public func setBool(_ key: String, value: Bool) -> KVStoreResult<Void> {
 		defaults.set(value, forKey: key)
 		return .success((), .checkpoint(self))
 	}
 
-	public func get(_ key: String) -> CheckpointedResult<Int64?, KVStoreError> {
+	public func getInt64(_ key: String) -> KVStoreResult<Int64?> {
 		guard let number = defaults.object(forKey: key) as? NSNumber else {
 			return .success(nil, .checkpoint(self))
 		}
 		return .success(number.int64Value, .checkpoint(self))
 	}
 
-	public func set(_ key: String, value: Int64) -> CheckpointedResult<Void, KVStoreError> {
+	public func setInt64(_ key: String, value: Int64) -> KVStoreResult<Void> {
 		defaults.set(NSNumber(value: value), forKey: key)
 		return .success((), .checkpoint(self))
 	}
 
-	public func get(_ key: String) -> CheckpointedResult<UInt64?, KVStoreError> {
+	public func getUInt64(_ key: String) -> KVStoreResult<UInt64?> {
 		guard let number = defaults.object(forKey: key) as? NSNumber else {
 			return .success(nil, .checkpoint(self))
 		}
 		return .success(number.uint64Value, .checkpoint(self))
 	}
 
-	public func set(_ key: String, value: UInt64) -> CheckpointedResult<Void, KVStoreError> {
+	public func setUInt64(_ key: String, value: UInt64) -> KVStoreResult<Void> {
 		defaults.set(NSNumber(value: value), forKey: key)
 		return .success((), .checkpoint(self))
 	}
 
-	public func get(_ key: String) -> CheckpointedResult<Double?, KVStoreError> {
+	public func getDouble(_ key: String) -> KVStoreResult<Double?> {
 		guard defaults.object(forKey: key) != nil else {
 			return .success(nil, .checkpoint(self))
 		}
 		return .success(defaults.double(forKey: key), .checkpoint(self))
 	}
 
-	public func set(_ key: String, value: Double) -> CheckpointedResult<Void, KVStoreError> {
+	public func setDouble(_ key: String, value: Double) -> KVStoreResult<Void> {
 		defaults.set(value, forKey: key)
 		return .success((), .checkpoint(self))
 	}
 
-	public func get(_ key: String) -> CheckpointedResult<Float?, KVStoreError> {
+	public func getFloat(_ key: String) -> KVStoreResult<Float?> {
 		guard defaults.object(forKey: key) != nil else {
 			return .success(nil, .checkpoint(self))
 		}
 		return .success(defaults.float(forKey: key), .checkpoint(self))
 	}
 
-	public func set(_ key: String, value: Float) -> CheckpointedResult<Void, KVStoreError> {
+	public func setFloat(_ key: String, value: Float) -> KVStoreResult<Void> {
 		defaults.set(value, forKey: key)
 		return .success((), .checkpoint(self))
 	}
 
-	public func get(_ key: String) -> CheckpointedResult<String?, KVStoreError> {
+	public func getString(_ key: String) -> KVStoreResult<String?> {
 		return .success(defaults.string(forKey: key), .checkpoint(self))
 	}
 
-	public func set(_ key: String, value: String) -> CheckpointedResult<Void, KVStoreError> {
+	public func setString(_ key: String, value: String) -> KVStoreResult<Void> {
 		defaults.set(value, forKey: key)
 		return .success((), .checkpoint(self))
 	}
 
-	public func get(_ key: String) -> CheckpointedResult<Data?, KVStoreError> {
+	public func getData(_ key: String) -> KVStoreResult<Data?> {
 		return .success(defaults.data(forKey: key), .checkpoint(self))
 	}
 
-	public func set(_ key: String, value: Data) -> CheckpointedResult<Void, KVStoreError> {
+	public func setData(_ key: String, value: Data) -> KVStoreResult<Void> {
 		defaults.set(value, forKey: key)
 		return .success((), .checkpoint(self))
 	}
 
-	public func remove(_ key: String) -> CheckpointedResult<Void, KVStoreError> {
+	public func remove(_ key: String) -> KVStoreResult<Void> {
 		defaults.removeObject(forKey: key)
 		return .success((), .checkpoint(self))
 	}

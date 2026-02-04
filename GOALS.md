@@ -11,7 +11,7 @@
 - Scalar-only values; no nested collections or arbitrary Codable.
 - Explicit encoding rules (Keychain format is internal; API is typed).
 - No silent type coercion at the API boundary; mismatches surface as `KVStoreError.typeMismatch`.
-- All APIs return `CheckpointedResult<T, KVStoreError>`; `KVStoreError` conforms to `ErrorEntity` (SwiftCore) for structured error reporting.
+- All APIs return `KVStoreResult<T>` (typealias for `CheckpointedResult<T, KVStoreError>`); `KVStoreError` conforms to `ErrorEntity` (SwiftCore) for structured error reporting.
 
 ## Clear security boundaries
 

@@ -26,7 +26,7 @@ public final class SecureStore: KVStore,
 
 	// MARK: ++ Keychain operations
 
-	private func readData(_ key: String) -> CheckpointedResult<Data?, KVStoreError> {
+	private func readData(_ key: String) -> KVStoreResult<Data?> {
 		let query: [String: Any] = [
 			kSecClass as String: kSecClassGenericPassword,
 			kSecAttrService as String: service,
@@ -62,7 +62,7 @@ public final class SecureStore: KVStore,
 	private func writeData(
 		_ key: String,
 		_ data: Data
-	) -> CheckpointedResult<Void, KVStoreError> {
+	) -> KVStoreResult<Void> {
 		let query: [String: Any] = [
 			kSecClass as String: kSecClassGenericPassword,
 			kSecAttrService as String: service,
@@ -87,7 +87,7 @@ public final class SecureStore: KVStore,
 
 	private func deleteItem(
 		_ key: String
-	) -> CheckpointedResult<Void, KVStoreError> {
+	) -> KVStoreResult<Void> {
 		let query: [String: Any] = [
 			kSecClass as String: kSecClassGenericPassword,
 			kSecAttrService as String: service,
@@ -183,7 +183,7 @@ public final class SecureStore: KVStore,
 		self.identifier = Self.nextID
 	}
 
-	public func get(_ key: String) -> CheckpointedResult<Bool?, KVStoreError> {
+	public func getBool(_ key: String) -> KVStoreResult<Bool?> {
 		switch readData(key) {
 		case .success(nil, let checkpoint):
 			return .success(nil, checkpoint)
@@ -202,7 +202,7 @@ public final class SecureStore: KVStore,
 		}
 	}
 
-	public func set(_ key: String, value: Bool) -> CheckpointedResult<Void, KVStoreError> {
+	public func setBool(_ key: String, value: Bool) -> KVStoreResult<Void> {
 		switch writeData(key, encodeBool(value)) {
 		case .success(_, let checkpoint):
 			return .success((), checkpoint)
@@ -211,7 +211,7 @@ public final class SecureStore: KVStore,
 		}
 	}
 
-	public func get(_ key: String) -> CheckpointedResult<Int64?, KVStoreError> {
+	public func getInt64(_ key: String) -> KVStoreResult<Int64?> {
 		switch readData(key) {
 		case .success(nil, let checkpoint):
 			return .success(nil, checkpoint)
@@ -230,7 +230,7 @@ public final class SecureStore: KVStore,
 		}
 	}
 
-	public func set(_ key: String, value: Int64) -> CheckpointedResult<Void, KVStoreError> {
+	public func setInt64(_ key: String, value: Int64) -> KVStoreResult<Void> {
 		switch writeData(key, encodeInt64(value)) {
 		case .success(_, let checkpoint):
 			return .success((), checkpoint)
@@ -239,7 +239,7 @@ public final class SecureStore: KVStore,
 		}
 	}
 
-	public func get(_ key: String) -> CheckpointedResult<UInt64?, KVStoreError> {
+	public func getUInt64(_ key: String) -> KVStoreResult<UInt64?> {
 		switch readData(key) {
 		case .success(nil, let checkpoint):
 			return .success(nil, checkpoint)
@@ -258,7 +258,7 @@ public final class SecureStore: KVStore,
 		}
 	}
 
-	public func set(_ key: String, value: UInt64) -> CheckpointedResult<Void, KVStoreError> {
+	public func setUInt64(_ key: String, value: UInt64) -> KVStoreResult<Void> {
 		switch writeData(key, encodeUInt64(value)) {
 		case .success(_, let checkpoint):
 			return .success((), checkpoint)
@@ -267,7 +267,7 @@ public final class SecureStore: KVStore,
 		}
 	}
 
-	public func get(_ key: String) -> CheckpointedResult<Double?, KVStoreError> {
+	public func getDouble(_ key: String) -> KVStoreResult<Double?> {
 		switch readData(key) {
 		case .success(nil, let checkpoint):
 			return .success(nil, checkpoint)
@@ -286,7 +286,7 @@ public final class SecureStore: KVStore,
 		}
 	}
 
-	public func set(_ key: String, value: Double) -> CheckpointedResult<Void, KVStoreError> {
+	public func setDouble(_ key: String, value: Double) -> KVStoreResult<Void> {
 		switch writeData(key, encodeDouble(value)) {
 		case .success(_, let checkpoint):
 			return .success((), checkpoint)
@@ -295,7 +295,7 @@ public final class SecureStore: KVStore,
 		}
 	}
 
-	public func get(_ key: String) -> CheckpointedResult<Float?, KVStoreError> {
+	public func getFloat(_ key: String) -> KVStoreResult<Float?> {
 		switch readData(key) {
 		case .success(nil, let checkpoint):
 			return .success(nil, checkpoint)
@@ -314,7 +314,7 @@ public final class SecureStore: KVStore,
 		}
 	}
 
-	public func set(_ key: String, value: Float) -> CheckpointedResult<Void, KVStoreError> {
+	public func setFloat(_ key: String, value: Float) -> KVStoreResult<Void> {
 		switch writeData(key, encodeFloat(value)) {
 		case .success(_, let checkpoint):
 			return .success((), checkpoint)
@@ -323,7 +323,7 @@ public final class SecureStore: KVStore,
 		}
 	}
 
-	public func get(_ key: String) -> CheckpointedResult<String?, KVStoreError> {
+	public func getString(_ key: String) -> KVStoreResult<String?> {
 		switch readData(key) {
 		case .success(nil, let checkpoint):
 			return .success(nil, checkpoint)
@@ -342,7 +342,7 @@ public final class SecureStore: KVStore,
 		}
 	}
 
-	public func set(_ key: String, value: String) -> CheckpointedResult<Void, KVStoreError> {
+	public func setString(_ key: String, value: String) -> KVStoreResult<Void> {
 		switch writeData(key, encodeString(value)) {
 		case .success(_, let checkpoint):
 			return .success((), checkpoint)
@@ -351,7 +351,7 @@ public final class SecureStore: KVStore,
 		}
 	}
 
-	public func get(_ key: String) -> CheckpointedResult<Data?, KVStoreError> {
+	public func getData(_ key: String) -> KVStoreResult<Data?> {
 		switch readData(key) {
 		case .success(nil, let checkpoint):
 			return .success(nil, checkpoint)
@@ -370,7 +370,7 @@ public final class SecureStore: KVStore,
 		}
 	}
 
-	public func set(_ key: String, value: Data) -> CheckpointedResult<Void, KVStoreError> {
+	public func setData(_ key: String, value: Data) -> KVStoreResult<Void> {
 		switch writeData(key, encodeData(value)) {
 		case .success(_, let checkpoint):
 			return .success((), checkpoint)
@@ -379,7 +379,7 @@ public final class SecureStore: KVStore,
 		}
 	}
 
-	public func remove(_ key: String) -> CheckpointedResult<Void, KVStoreError> {
+	public func remove(_ key: String) -> KVStoreResult<Void> {
 		switch deleteItem(key) {
 		case .success(_, let checkpoint):
 			return .success((), checkpoint)

@@ -14,7 +14,8 @@ KVStore is designed for small values only. It is not a general persistence layer
 
 The package provides:
 
-- **KVStore** – Protocol defining the storage contract: string keys, one `get`/`set` overload per supported type (SwiftCore’s `ScalarValue` plus Data), and `remove(_ key: String)`. All APIs return `CheckpointedResult<T, KVStoreError>` from SwiftCore. The compiler picks the overload from the call site (return type or argument type), enforcing type safety at compile time.
+- **KVStore** – Protocol defining the storage contract: string keys, one getType/setType pair per supported type (e.g. `getBool`/`setBool`, `getString`/`setString`; SwiftCore’s `ScalarValue` plus Data), and `remove(_ key: String)`. All APIs return `KVStoreResult<T>`. The typed method names enforce type safety at compile time.
+- **`KVStoreResult<T>`** – Typealias for `CheckpointedResult<T, KVStoreError>` (SwiftCore); return type of all store APIs.
 - **SettingsStore** – UserDefaults-backed implementation for non-sensitive data.
 - **SecureStore** – Keychain-backed implementation for secrets (Apple platforms only; conditionally compiled with `#if canImport(Security)`).
 - **KVStoreError** – Error type conforming to `ErrorEntity` (SwiftCore) for structured reporting.
@@ -27,7 +28,7 @@ KVStore supports the scalar types from SwiftCore’s `ScalarValue` plus Data:
 
 - **String**, **Bool**, **Int64**, **UInt64**, **Double**, **Float**, **Data**
 
-`get(_ key: String)` returns `CheckpointedResult<T?, KVStoreError>` (nil when the key is absent). `set(_ key: String, value: T)` and `remove(_ key: String)` return `CheckpointedResult<Void, KVStoreError>`.
+Type-specific getters (e.g. `getBool`, `getString`) return `KVStoreResult<T?>` (nil when the key is absent). Type-specific setters (e.g. `setBool`, `setString`) and `remove(_ key: String)` return `KVStoreResult<Void>`.
 
 Nested collections, dictionaries, and arbitrary Codable types are not supported.
 
@@ -53,7 +54,7 @@ Typical use: auth tokens, refresh tokens, private identifiers, cryptographic mat
 
 ## Errors
 
-All store APIs return `CheckpointedResult<T, KVStoreError>`. `KVStoreError` conforms to `ErrorEntity` (Error, Sendable, Encodable) and has these cases:
+All store APIs return `KVStoreResult<T>`. `KVStoreError` conforms to `ErrorEntity` (Error, Sendable, Encodable) and has these cases:
 
 - **keyNotFound(key: String)** – Key was not in the store.
 - **typeMismatch(key: String, expected: String)** – Stored value could not be decoded as the requested type.
