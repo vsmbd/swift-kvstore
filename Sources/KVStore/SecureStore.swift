@@ -176,8 +176,11 @@ public final class SecureStore: KVStore,
 
 	// MARK: + Public scope
 
+	public let identifier: UInt64
+
 	public init(service: String) {
 		self.service = service
+		self.identifier = Self.nextID
 	}
 
 	public func get(_ key: String) -> CheckpointedResult<Bool?, KVStoreError> {

@@ -22,8 +22,11 @@ public final class SettingsStore: KVStore,
 
 	// MARK: + Public scope
 
+	public let identifier: UInt64
+
 	public init(defaults: UserDefaults = .standard) {
 		self.defaults = defaults
+		self.identifier = Self.nextID
 	}
 
 	public func get(_ key: String) -> CheckpointedResult<Bool?, KVStoreError> {
